@@ -1,4 +1,4 @@
-package com.example.plugins;
+package org.vaadin.springportlet;
 
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
@@ -9,14 +9,11 @@ import org.springframework.context.annotation.PropertySource;
 
 @Configuration
 @Import(VaadinConfiguration.class)
-@ComponentScan(basePackages = {"com.example.plugins" /*, ...other packages with Spring beans... */})
-public class YourApplicationConfiguration {
-    //...
-    //Your condiguration of DataSource, SessionFactory, TransactionManager, etc.
-    //...
+@ComponentScan(basePackages = {"org.vaadin.springportlet"})
+public class ApplicationConfiguration {
+	
     @Configuration
     @PropertySource("classpath:application.properties")
     static class ApplicationProperties {}
     
-	
 }

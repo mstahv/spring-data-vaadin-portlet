@@ -1,15 +1,15 @@
-package com.example.plugins;
+package org.vaadin.springportlet;
 
 import java.util.Date;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.vaadin.spring.annotation.VaadinPortletUI;
+import org.vaadin.springportlet.backend.Book;
+import org.vaadin.springportlet.backend.BookRepository;
 import org.vaadin.viritin.fields.MTable;
 import org.vaadin.viritin.layouts.MVerticalLayout;
 
-import com.example.plugins.backend.Book;
-import com.example.plugins.backend.BookRepository;
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.exception.SystemException;
 import com.liferay.portal.model.User;
@@ -45,10 +45,6 @@ public class LibraryPortletUI extends UI {
 
     @Override
     protected void init(VaadinRequest request) {
-
-        final VerticalLayout layout = new MVerticalLayout().withMargin(false);
-        setContent(layout);
-
         ensureTestData();
 
         bookListing = new MTable<>(Book.class).withProperties("name",
@@ -82,8 +78,10 @@ public class LibraryPortletUI extends UI {
 
         listBooks();
 
-        layout.addComponent(bookListing);
+        final VerticalLayout layout = new MVerticalLayout(bookListing).withMargin(false);
+        setContent(layout);
 
+        
         if (mySpringService.isAllowedToLoan()) {
             layout.addComponent(new MButton("Add new Book", e -> {
                 Book book = new Book();

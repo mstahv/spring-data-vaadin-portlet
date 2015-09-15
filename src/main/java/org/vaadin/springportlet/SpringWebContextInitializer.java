@@ -1,15 +1,15 @@
-package com.example.plugins;
+package org.vaadin.springportlet;
 
 import org.springframework.web.context.AbstractContextLoaderInitializer;
 import org.springframework.web.context.WebApplicationContext;
 import org.springframework.web.context.support.AnnotationConfigWebApplicationContext;
 
-public class YourSpringWebContextInitializer extends AbstractContextLoaderInitializer {
+public class SpringWebContextInitializer extends AbstractContextLoaderInitializer {
 
     @Override
     protected WebApplicationContext createRootApplicationContext() {
         AnnotationConfigWebApplicationContext applicationContext = new AnnotationConfigWebApplicationContext();
-        applicationContext.register(YourApplicationConfiguration.class);
+        applicationContext.register(ApplicationConfiguration.class);
         return applicationContext;
     }
     

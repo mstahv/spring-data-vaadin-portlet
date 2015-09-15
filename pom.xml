@@ -158,6 +158,7 @@
             <version>${liferay.version}</version>
             <scope>provided</scope>
         </dependency>
+        
     </dependencies>
 
     <build>

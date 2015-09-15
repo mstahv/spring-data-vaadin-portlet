@@ -1,4 +1,4 @@
-package com.example.plugins.springconfig;
+package org.vaadin.springportlet;
 
 import java.util.Properties;
 
@@ -19,7 +19,7 @@ import com.zaxxer.hikari.HikariDataSource;
 
 @Configuration
 @EnableTransactionManagement
-@EnableJpaRepositories(basePackages ={"com.example"})
+@EnableJpaRepositories(basePackageClasses=PersistenceContext.class)
 class PersistenceContext {
 
 	@Bean(destroyMethod = "close")
@@ -41,7 +41,7 @@ class PersistenceContext {
         LocalContainerEntityManagerFactoryBean entityManagerFactoryBean = new LocalContainerEntityManagerFactoryBean();
         entityManagerFactoryBean.setDataSource(dataSource);
         entityManagerFactoryBean.setJpaVendorAdapter(new HibernateJpaVendorAdapter());
-        entityManagerFactoryBean.setPackagesToScan("com.example");
+        entityManagerFactoryBean.setPackagesToScan(PersistenceContext.class.getPackage().getName());
  
         Properties jpaProperties = new Properties();
      

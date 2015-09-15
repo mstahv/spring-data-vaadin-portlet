@@ -15,7 +15,7 @@
 
 		<init-param>
 			<name>UI</name>
-			<value>com.example.plugins.LibraryPortletUI</value>
+			<value>org.vaadin.springportlet.LibraryPortletUI</value>
 		</init-param>
 
 		<init-param>

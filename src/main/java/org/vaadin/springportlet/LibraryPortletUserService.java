@@ -1,12 +1,12 @@
-package com.example.plugins;
+package org.vaadin.springportlet;
 
 import javax.annotation.PostConstruct;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import org.vaadin.springportlet.backend.Book;
+import org.vaadin.springportlet.backend.BookRepository;
 
-import com.example.plugins.backend.Book;
-import com.example.plugins.backend.BookRepository;
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.exception.SystemException;
 import com.liferay.portal.model.Company;

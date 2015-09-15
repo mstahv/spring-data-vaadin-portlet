@@ -1,4 +1,4 @@
-package com.example.plugins.backend;
+package org.vaadin.springportlet.backend;
 
 import java.util.Date;
 
