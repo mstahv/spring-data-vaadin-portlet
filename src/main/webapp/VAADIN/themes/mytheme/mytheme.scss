@@ -1,0 +1,40 @@
+
+$v-font-family: inherit;
+$v-font-size: 15px;
+
+$v-border-radius: 2px;
+$v-unit-size: 30px;
+$v-layout-spacing-horizontal: 15px;
+$v-layout-spacing-vertical: 15px;
+$v-layout-margin-right: 10px;
+$v-layout-margin-left: 10px;
+$v-layout-margin-top: 20px;
+$v-layout-margin-bottom: 10px;
+
+$v-focus-color: #50a2f5;
+
+/* Import the Valo theme. */
+/* This only allows us to use the mixins defined in it and does not add any styles by itself. */
+@import "../valo/valo.scss";
+
+.v-app {
+	background-color: #fff !important;
+}
+
+/* This contains all of your theme. */
+/* If somebody wants to extend the theme she will include this mixin. */
+@mixin mytheme {
+  /* Include all the styles from the liferay theme */
+  @include valo;
+
+  /* Insert your theme rules here */
+  .v-caption  {
+  	font-weight: inherit;
+  }
+  
+  .v-textfield {
+    /* Override nasty strong Liferay selectors, border-box vs. non-borderbox collision */
+  	height: 30px !important;
+  }
+  
+}
