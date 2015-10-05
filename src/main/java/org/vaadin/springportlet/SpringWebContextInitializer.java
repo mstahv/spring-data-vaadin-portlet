@@ -1,16 +1,12 @@
 package org.vaadin.springportlet;
 
-import org.springframework.web.context.AbstractContextLoaderInitializer;
-import org.springframework.web.context.WebApplicationContext;
-import org.springframework.web.context.support.AnnotationConfigWebApplicationContext;
+import org.springframework.boot.builder.SpringApplicationBuilder;
+import org.springframework.boot.context.web.SpringBootServletInitializer;
 
-public class SpringWebContextInitializer extends AbstractContextLoaderInitializer {
+public class SpringWebContextInitializer extends SpringBootServletInitializer {
 
     @Override
-    protected WebApplicationContext createRootApplicationContext() {
-        AnnotationConfigWebApplicationContext applicationContext = new AnnotationConfigWebApplicationContext();
-        applicationContext.register(ApplicationConfiguration.class);
-        return applicationContext;
+    protected SpringApplicationBuilder configure(SpringApplicationBuilder application) {
+        return application.sources(ApplicationConfiguration.class);
     }
-    
 }
