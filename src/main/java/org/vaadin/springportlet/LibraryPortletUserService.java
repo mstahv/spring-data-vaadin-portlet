@@ -103,14 +103,14 @@ public class LibraryPortletUserService {
 		}
 	}
 
-	public boolean isLoanedByMe(Book entity) {
+	public boolean isBorrowedByMe(Book entity) {
 		if (getCurrentUser() == null) {
 			return false;
 		}
 		return currentUser.getEmailAddress().equals(entity.getBorrowedBy());
 	}
 
-	public boolean isAllowedToLoan() {
+	public boolean isAllowedToBorrow() {
 		return getCurrentUser() != null;
 	}
 	

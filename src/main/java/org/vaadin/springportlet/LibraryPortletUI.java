@@ -39,8 +39,8 @@ public class LibraryPortletUI extends UI {
                 .withGeneratedColumn("loan", entity -> {
                     User loaner = service.getLoaner(entity);
                     if (loaner == null) {
-                        if (service.isAllowedToLoan()) {
-                            Button btn = new Button("Loan", e -> {
+                        if (service.isAllowedToBorrow()) {
+                            Button btn = new Button("Borrow", e -> {
                                 service.borrowBook(entity);
                                 listBooks();
                             });
@@ -50,7 +50,7 @@ public class LibraryPortletUI extends UI {
                             return "Login to loan";
                         }
 
-                    } else if (service.isLoanedByMe(entity)) {
+                    } else if (service.isBorrowedByMe(entity)) {
                         Button btn = new Button("Mark as returned", e -> {
                             service.releaseBook(entity);
                             listBooks();
@@ -58,7 +58,7 @@ public class LibraryPortletUI extends UI {
                         btn.setStyleName(ValoTheme.BUTTON_DANGER);
                         return btn;
                     } else {
-                        return "loaned by " + loaner.getFirstName() + " " + loaner.
+                        return "borrowed by " + loaner.getFirstName() + " " + loaner.
                                 getLastName();
                     }
                 });
