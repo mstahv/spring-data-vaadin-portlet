@@ -34,12 +34,26 @@ public class LibraryPortletUserService {
 	@Autowired
 	private BookRepository repository;
 
+	public void save(Book entity) {
+		repository.save(entity);
+	}
+
+	public List<Book> findAll() {
+		return repository.findAll();
+	}
+
+
 	private User currentUser;
 
 	private Company company;
 
 	@PostConstruct
 	public void init() {
+		initUserAndCompany();
+		ensureTestData();
+	}
+
+	private void initUserAndCompany() {
 		try {
 			currentUser = PortalUtil.getUser(VaadinLiferayRequest.getCurrentPortletRequest());
 			company = PortalUtil.getCompany(VaadinLiferayRequest.getCurrentPortletRequest());
@@ -50,41 +64,37 @@ public class LibraryPortletUserService {
 			// TODO Auto-generated catch block
 			e1.printStackTrace();
 		}
-		ensureTestData();
 	}
 
 	public User getCurrentUser() {
 		if (currentUser == null) {
-			try {
-				currentUser = PortalUtil.getUser(VaadinLiferayRequest.getCurrentPortletRequest());
-				company = PortalUtil.getCompany(VaadinLiferayRequest.getCurrentPortletRequest());
-			} catch (PortalException e1) {
-				// TODO Auto-generated catch block
-				e1.printStackTrace();
-			} catch (SystemException e1) {
-				// TODO Auto-generated catch block
-				e1.printStackTrace();
-			}
+			initUserAndCompany();
 		}
 		return currentUser;
 	}
 
-	public void loanBook(Book b) {
-		b.setLoanedBy(currentUser.getEmailAddress());
+	/**
+	 * Sets the email field of the Book entity to current Liferay users
+	 * main email and persists changes to DB.
+	 * 
+	 * @param b the book to be set loaned by current user
+	 */
+	public void borrowBook(Book b) {
+		b.setBorrowedBy(getCurrentUser().getEmailAddress());
 		repository.save(b);
 	}
 
 	public void releaseBook(Book b) {
-		b.setLoanedBy(null);
+		b.setBorrowedBy(null);
 		repository.save(b);
 	}
 
 	public User getLoaner(Book b) {
-		if (b.getLoanedBy() == null) {
+		if (b.getBorrowedBy() == null) {
 			return null;
 		} else {
 			try {
-				return UserLocalServiceUtil.getUserByEmailAddress(company.getCompanyId(), b.getLoanedBy());
+				return UserLocalServiceUtil.getUserByEmailAddress(company.getCompanyId(), b.getBorrowedBy());
 			} catch (PortalException e) {
 				throw new RuntimeException(e);
 			} catch (SystemException e) {
@@ -97,7 +107,7 @@ public class LibraryPortletUserService {
 		if (getCurrentUser() == null) {
 			return false;
 		}
-		return currentUser.getEmailAddress().equals(entity.getLoanedBy());
+		return currentUser.getEmailAddress().equals(entity.getBorrowedBy());
 	}
 
 	public boolean isAllowedToLoan() {
@@ -107,39 +117,6 @@ public class LibraryPortletUserService {
 	public boolean isAdmin() {
 		PermissionChecker permissionChecker = PermissionThreadLocal.getPermissionChecker();
 		return permissionChecker.isOmniadmin();
-	}
-
-	void addBook(Book entity) {
-		repository.save(entity);
-	}
-
-	private void ensureTestData() {
-		if (repository.count() == 0) {
-			try {
-				Book book = new Book();
-				book.setName("Book of Vaadin V1");
-				List<User> companyUsers = UserLocalServiceUtil.getCompanyUsers(
-						PortalUtil.getCompany(VaadinLiferayRequest.getCurrentPortletRequest()).getCompanyId(), 1, 5);
-				book.setLoanedBy(companyUsers.get(0).getEmailAddress());
-
-				repository.save(book);
-				book = new Book();
-				book.setName("Book of Vaadin, Vol 1");
-				book.setLoanedBy(companyUsers.get(1).getEmailAddress());
-				repository.save(book);
-				book = new Book();
-				book.setName("Book of Vaadin, Vol 2");
-				book.setPublishDate(new Date());
-				repository.save(book);
-			} catch (SystemException | PortalException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-		}
-	}
-
-	public List<Book> findAll() {
-		return repository.findAll();
 	}
 
 	public List<String> getCompanyUserEmails() {
@@ -152,6 +129,31 @@ public class LibraryPortletUserService {
 
 		} catch (SystemException e) {
 			throw new RuntimeException(e);
+		}
+	}
+
+	private void ensureTestData() {
+		if (repository.count() == 0) {
+			try {
+				Book book = new Book();
+				book.setName("Book of Vaadin V1");
+				List<User> companyUsers = UserLocalServiceUtil.getCompanyUsers(
+						PortalUtil.getCompany(VaadinLiferayRequest.getCurrentPortletRequest()).getCompanyId(), 1, 5);
+				book.setBorrowedBy(companyUsers.get(0).getEmailAddress());
+
+				repository.save(book);
+				book = new Book();
+				book.setName("Book of Vaadin, Vol 1");
+				book.setBorrowedBy(companyUsers.get(1).getEmailAddress());
+				repository.save(book);
+				book = new Book();
+				book.setName("Book of Vaadin, Vol 2");
+				book.setPublishDate(new Date());
+				repository.save(book);
+			} catch (SystemException | PortalException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 		}
 	}
 

@@ -41,7 +41,7 @@ public class LibraryPortletUI extends UI {
                     if (loaner == null) {
                         if (service.isAllowedToLoan()) {
                             Button btn = new Button("Loan", e -> {
-                                service.loanBook(entity);
+                                service.borrowBook(entity);
                                 listBooks();
                             });
                             btn.setStyleName(ValoTheme.BUTTON_PRIMARY);
@@ -69,7 +69,7 @@ public class LibraryPortletUI extends UI {
                 button.addClickListener((Button.ClickEvent event) -> {
                     bookForm.setEntity(entity);
                     bookForm.setSavedHandler((Book entity1) -> {
-                        service.addBook(entity1);
+                        service.save(entity1);
                         listBooks();
                         bookForm.getPopup().close();
                     });
@@ -90,7 +90,7 @@ public class LibraryPortletUI extends UI {
                 Book book = new Book();
                 bookForm.setEntity(book);
                 bookForm.setSavedHandler((Book entity) -> {
-                    service.addBook(entity);
+                    service.save(entity);
                     listBooks();
                     bookForm.getPopup().close();
                 });

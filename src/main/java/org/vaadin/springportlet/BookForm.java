@@ -34,20 +34,20 @@ public class BookForm extends AbstractForm<Book> {
 
     MTextArea description = new MTextArea("Description").withFullWidth();
     
-    TypedSelect<String> loanedBy = new TypedSelect<String>("Loaned by")
+    TypedSelect<String> borrowedBy = new TypedSelect<String>("Borrowed by")
     		.withSelectType(ComboBox.class);
 
     @Override
     protected Component createContent() {
 
-    	loanedBy.setOptions(service.getCompanyUserEmails());
+    	borrowedBy.setOptions(service.getCompanyUserEmails());
     	
         return new MVerticalLayout(
                 new FormLayout(
                         name,
                         description,
                         publishDate,
-                        loanedBy
+                        borrowedBy
                 ),
                 getToolbar()
         );

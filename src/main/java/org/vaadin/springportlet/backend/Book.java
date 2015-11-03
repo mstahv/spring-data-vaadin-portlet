@@ -20,14 +20,17 @@ public class Book extends AbstractEntity {
     
     private String description;
     
-    private String loanedBy;
+    private String borrowedBy;
 
-    public String getLoanedBy() {
-        return loanedBy;
+    /**
+     * @return the email of person who has borrowed this book
+     */
+    public String getBorrowedBy() {
+        return borrowedBy;
     }
 
-    public void setLoanedBy(String loanedBy) {
-        this.loanedBy = loanedBy;
+    public void setBorrowedBy(String borrowedBy) {
+        this.borrowedBy = borrowedBy;
     }
     
     public String getDescription() {
