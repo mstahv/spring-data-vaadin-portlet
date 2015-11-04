@@ -12,7 +12,6 @@ import com.vaadin.annotations.Theme;
 import com.vaadin.annotations.Widgetset;
 import com.vaadin.server.FontAwesome;
 import com.vaadin.server.VaadinRequest;
-import com.vaadin.ui.Button;
 import com.vaadin.ui.UI;
 import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.themes.ValoTheme;
@@ -24,12 +23,12 @@ import com.vaadin.ui.themes.ValoTheme;
 public class LibraryPortletUI extends UI {
 
     @Autowired
-    LibraryPortletUserService service;
+    private LibraryPortletUserService service;
 
     private MTable<Book> bookListing;
 
     @Autowired
-    BookForm bookForm;
+    private BookForm bookForm;
 
     @Override
     protected void init(VaadinRequest request) {
@@ -37,45 +36,38 @@ public class LibraryPortletUI extends UI {
         bookListing = new MTable<>(Book.class).withProperties("name",
                 "publishDate").withHeight("250px").withFullWidth()
                 .withGeneratedColumn("loan", entity -> {
-                    User loaner = service.getLoaner(entity);
-                    if (loaner == null) {
+                    User borrower = service.getBorrower(entity);
+                    if (borrower == null) {
                         if (service.isAllowedToBorrow()) {
-                            Button btn = new Button("Borrow", e -> {
+                            return new MButton("Borrow", e -> {
                                 service.borrowBook(entity);
                                 listBooks();
-                            });
-                            btn.setStyleName(ValoTheme.BUTTON_PRIMARY);
-                            return btn;
+                            }).withStyleName(ValoTheme.BUTTON_PRIMARY);
                         } else {
                             return "Login to loan";
                         }
-
                     } else if (service.isBorrowedByMe(entity)) {
-                        Button btn = new Button("Mark as returned", e -> {
+                        return new MButton("Mark as returned", e -> {
                             service.releaseBook(entity);
                             listBooks();
-                        });
-                        btn.setStyleName(ValoTheme.BUTTON_DANGER);
-                        return btn;
+                        }).withStyleName(ValoTheme.BUTTON_DANGER);
                     } else {
-                        return "borrowed by " + loaner.getFirstName() + " " + loaner.
+                        return "borrowed by " + borrower.getFirstName() + " " + borrower.
                                 getLastName();
                     }
                 });
 
         if (service.isAdmin()) {
-            bookListing.withGeneratedColumn("edit", (Book entity) -> {
-                Button button = new Button(FontAwesome.PENCIL);
-                button.addClickListener((Button.ClickEvent event) -> {
-                    bookForm.setEntity(entity);
-                    bookForm.setSavedHandler((Book entity1) -> {
-                        service.save(entity1);
+            bookListing.withGeneratedColumn("edit", book -> {
+                return new MButton(FontAwesome.PENCIL, e -> {
+                    bookForm.setEntity(book);
+                    bookForm.setSavedHandler(b -> {
+                        service.save(b);
                         listBooks();
                         bookForm.getPopup().close();
                     });
                     bookForm.openInModalPopup();
                 });
-                return button;
             });
         }
 
@@ -87,10 +79,9 @@ public class LibraryPortletUI extends UI {
 
         if (service.isAdmin()) {
             layout.addComponent(new MButton("Add new Book", e -> {
-                Book book = new Book();
-                bookForm.setEntity(book);
-                bookForm.setSavedHandler((Book entity) -> {
-                    service.save(entity);
+                bookForm.setEntity(new Book());
+                bookForm.setSavedHandler(book -> {
+                    service.save(book);
                     listBooks();
                     bookForm.getPopup().close();
                 });

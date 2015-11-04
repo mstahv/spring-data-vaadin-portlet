@@ -89,7 +89,7 @@ public class LibraryPortletUserService {
 		repository.save(b);
 	}
 
-	public User getLoaner(Book b) {
+	public User getBorrower(Book b) {
 		if (b.getBorrowedBy() == null) {
 			return null;
 		} else {
