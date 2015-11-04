@@ -75,7 +75,7 @@ public class LibraryPortletUserService {
 	 * Sets the email field of the Book entity to current Liferay users
 	 * main email and persists changes to DB.
 	 * 
-	 * @param b the book to be set loaned by current user
+	 * @param b the book to be set borrowed by current user
 	 */
 	public void borrowBook(Book b) {
 		b.setBorrowedBy(getCurrentUser().getEmailAddress());
