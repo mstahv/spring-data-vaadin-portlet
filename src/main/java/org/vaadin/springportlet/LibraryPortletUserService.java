@@ -14,6 +14,7 @@ import org.vaadin.springportlet.backend.BookRepository;
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.exception.SystemException;
 import com.liferay.portal.model.Company;
+import com.liferay.portal.model.CompanyModel;
 import com.liferay.portal.model.User;
 import com.liferay.portal.security.permission.PermissionChecker;
 import com.liferay.portal.security.permission.PermissionThreadLocal;
@@ -67,9 +68,6 @@ public class LibraryPortletUserService {
 	}
 
 	public User getCurrentUser() {
-		if (currentUser == null) {
-			initUserAndCompany();
-		}
 		return currentUser;
 	}
 
@@ -94,13 +92,17 @@ public class LibraryPortletUserService {
 			return null;
 		} else {
 			try {
-				return UserLocalServiceUtil.getUserByEmailAddress(company.getCompanyId(), b.getBorrowedBy());
+				return UserLocalServiceUtil.getUserByEmailAddress(getCompany().getCompanyId(), b.getBorrowedBy());
 			} catch (PortalException e) {
 				throw new RuntimeException(e);
 			} catch (SystemException e) {
 				throw new RuntimeException(e);
 			}
 		}
+	}
+
+	private CompanyModel getCompany() {
+		return company;
 	}
 
 	public boolean isBorrowedByMe(Book entity) {
@@ -122,7 +124,7 @@ public class LibraryPortletUserService {
 	public List<String> getCompanyUserEmails() {
 		try {
 			List<User> companyUsers = UserLocalServiceUtil
-					.getCompanyUsers(company.getCompanyId(), 0, 1000);
+					.getCompanyUsers(getCompany().getCompanyId(), 0, 1000);
 			return companyUsers.stream()
 					.map(u -> u.getEmailAddress())
 					.collect(Collectors.toList());
