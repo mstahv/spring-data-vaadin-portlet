@@ -118,11 +118,6 @@
         </dependency>
         
         <dependency>
-            <groupId>org.hibernate</groupId>
-            <artifactId>hibernate-validator</artifactId>
-        </dependency>
-
-        <dependency>
             <groupId>org.vaadin</groupId>
             <artifactId>viritin</artifactId>
             <version>1.37</version>
