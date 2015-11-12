@@ -24,7 +24,7 @@ import com.vaadin.server.VaadinPortlet.VaadinLiferayRequest;
 import com.vaadin.spring.annotation.UIScope;
 
 /**
- * A service class that accesses JPA entities via Sprin Data Repository and
+ * A service class that accesses JPA entities via Spring Data Repository and
  * combines that data with the users specific details provided by Liferay
  * services. Also used to hide some Liferay specific code from the UI layer.
  */
